@@ -9,16 +9,31 @@ public class GameManager : MonoBehaviour
     public Text scoreText;
     public GameObject playButton;
     public GameObject gameOver;
-    public int score { get; private set; }
+    public int score {get; private set;}
+
+    private static GameManager instance;
 
     private void Awake()
     {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
         Application.targetFrameRate = 60;
 
         player = FindObjectOfType<Player>();
         spawner = FindObjectOfType<Spawner>();
 
         Pause();
+    }
+
+    public static GameManager GetInstance()
+    {
+        return instance;
     }
 
     public void Play()
@@ -34,7 +49,8 @@ public class GameManager : MonoBehaviour
 
         Pipes[] pipes = FindObjectsOfType<Pipes>();
 
-        for (int i = 0; i < pipes.Length; i++) {
+        for (int i = 0; i < pipes.Length; i++) 
+        {
             Destroy(pipes[i].gameObject);
         }
     }   
@@ -63,5 +79,4 @@ public class GameManager : MonoBehaviour
     {
         Application.Quit();
     }
-
 }
